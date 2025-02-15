@@ -1,0 +1,111 @@
+sentiment_analysis_app/
+│── .git/                 # Git repository (created after initializing Git)
+│── app.py                # Streamlit app main script
+│── requirements.txt       # Python dependencies
+│── model/                
+│   ├── sentiment_model.pkl   # Serialized trained model
+│   ├── tokenizer.pkl         # Tokenizer (if required)
+│── data/                    
+│   ├── sample_reviews.csv    # Sample test data (optional)
+│── utils.py               # Utility functions
+│── README.md              # Project documentation
+│── .gitignore             # Ignore unnecessary files for Git
+│── notebooks/             
+│   ├── modeling_std_trainer.ipynb  # Your provided Jupyter Notebook
+│── images/                
+│   ├── frame2.jpg         # Figma design reference
+
+
+
+import pickle
+
+# Save the model
+with open("model/sentiment_model.pkl", "wb") as f:
+    pickle.dump(trained_model, f)
+
+# If you have a tokenizer, save it too
+with open("model/tokenizer.pkl", "wb") as f:
+    pickle.dump(tokenizer, f)
+
+print("Model and tokenizer saved successfully!")
+
+
+# Create streamlit app
+
+import streamlit as st
+import pickle
+import torch
+
+# Load the trained model
+@st.cache_resource
+def load_model():
+    with open("model/sentiment_model.pkl", "rb") as f:
+        model = pickle.load(f)
+    return model
+
+# Load the tokenizer
+@st.cache_resource
+def load_tokenizer():
+    with open("model/tokenizer.pkl", "rb") as f:
+        tokenizer = pickle.load(f)
+    return tokenizer
+
+model = load_model()
+tokenizer = load_tokenizer()
+
+
+
+# build web ui
+# Streamlit UI
+st.set_page_config(page_title="Sentiment Analysis", layout="wide")
+
+# Sidebar
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Go to", ["Home", "Data exploration", "Model"])
+
+if page == "Home":
+    st.title("Sentiment Analysis for BCA Mobile")
+    st.write("### Hey, use this sentiment analyzer!")
+    
+    # Text input
+    user_input = st.text_area("Type here", "")
+
+    # Predict button
+    if st.button("Predict"):
+        if user_input:
+            inputs = tokenizer(user_input, return_tensors="pt", padding=True, truncation=True)
+            with torch.no_grad():
+                outputs = model(**inputs)
+            
+            sentiment = torch.argmax(outputs.logits, dim=1).item()
+            sentiment_labels = {0: "Negative", 1: "Neutral", 2: "Positive"}
+            
+            # Display results
+            st.write("### Results:")
+            st.write(f"Sentiment: **{sentiment_labels[sentiment]}**")
+            
+            if sentiment == 0:
+                st.image("https://cdn-icons-png.flaticon.com/512/2278/2278053.png", width=100)
+            elif sentiment == 1:
+                st.image("https://cdn-icons-png.flaticon.com/512/2278/2278054.png", width=100)
+            else:
+                st.image("https://cdn-icons-png.flaticon.com/512/2278/2278057.png", width=100)
+
+elif page == "Data exploration":
+    st.write("### Data exploration coming soon!")
+
+elif page == "Model":
+    st.write("### Model performance and details coming soon!")
+
+
+
+pip install streamlit torch pickle5
+
+streamlit
+torch
+pickle5
+
+
+streamlit run app.py
+
+
