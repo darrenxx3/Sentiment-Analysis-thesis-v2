@@ -1,0 +1,148 @@
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+import pandas as pd
+import pickle
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix
+from torch.utils.data import DataLoader, Dataset
+from nltk.tokenize import word_tokenize
+from collections import Counter
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Check GPU availability
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Selected Device:", device)
+
+# Load and preprocess data
+df = pd.read_csv('bca_preprocessed_data.csv')
+X = df['content']
+y = df['sentiment']
+
+# Tokenization
+X = [word_tokenize(text.lower()) for text in X]
+
+# Build vocabulary
+word_counts = Counter(word for sentence in X for word in sentence)
+vocab = {word: i+1 for i, (word, _) in enumerate(word_counts.most_common())}
+vocab["<PAD>"] = 0
+
+# Convert text to sequences
+X = [[vocab[word] for word in sentence] for sentence in X]
+
+# Padding
+def pad_sequences(sequences, maxlen):
+    return [seq[:maxlen] + [0] * (maxlen - len(seq)) if len(seq) < maxlen else seq[:maxlen] for seq in sequences]
+
+maxlen = 128
+X = pad_sequences(X, maxlen)
+
+# Train-test split
+X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42, stratify=y_temp)
+
+# Convert to tensors
+X_train, y_train = torch.tensor(X_train, dtype=torch.long), torch.tensor(y_train.values, dtype=torch.long)
+X_val, y_val = torch.tensor(X_val, dtype=torch.long), torch.tensor(y_val.values, dtype=torch.long)
+X_test, y_test = torch.tensor(X_test, dtype=torch.long), torch.tensor(y_test.values, dtype=torch.long)
+
+# Dataloader class
+class SentimentDataset(Dataset):
+    def __init__(self, X, y):
+        self.X = X
+        self.y = y
+
+    def __len__(self):
+        return len(self.X)
+
+    def __getitem__(self, idx):
+        return self.X[idx], self.y[idx]
+
+train_loader = DataLoader(SentimentDataset(X_train, y_train), batch_size=64, shuffle=True)
+val_loader = DataLoader(SentimentDataset(X_val, y_val), batch_size=64)
+test_loader = DataLoader(SentimentDataset(X_test, y_test), batch_size=64)
+
+# Define LSTM model
+class LSTMSentiment(nn.Module):
+    def __init__(self, vocab_size, embed_size, hidden_size, output_size, num_layers, dropout):
+        super(LSTMSentiment, self).__init__()
+        self.embedding = nn.Embedding(vocab_size, embed_size, padding_idx=0)
+        self.lstm = nn.LSTM(embed_size, hidden_size, num_layers, batch_first=True, dropout=dropout)
+        self.fc = nn.Linear(hidden_size, output_size)
+
+    def forward(self, x):
+        x = self.embedding(x)
+        _, (hidden, _) = self.lstm(x)
+        return self.fc(hidden[-1])
+
+# Instantiate model
+model = LSTMSentiment(len(vocab), 128, 256, 3, 2, 0.5).to(device)
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=3e-4)
+
+# Training function
+def train_model(model, train_loader, val_loader, criterion, optimizer, epochs=10):
+    for epoch in range(epochs):
+        model.train()
+        train_loss, correct = 0, 0
+        for X_batch, y_batch in train_loader:
+            X_batch, y_batch = X_batch.to(device), y_batch.to(device)
+            optimizer.zero_grad()
+            outputs = model(X_batch)
+            loss = criterion(outputs, y_batch)
+            loss.backward()
+            optimizer.step()
+            train_loss += loss.item()
+            correct += (outputs.argmax(1) == y_batch).sum().item()
+        
+        model.eval()
+        val_loss, val_correct = 0, 0
+        with torch.no_grad():
+            for X_batch, y_batch in val_loader:
+                X_batch, y_batch = X_batch.to(device), y_batch.to(device)
+                outputs = model(X_batch)
+                val_loss += criterion(outputs, y_batch).item()
+                val_correct += (outputs.argmax(1) == y_batch).sum().item()
+        
+        print(f"Epoch {epoch+1}: Train Loss {train_loss/len(train_loader):.4f}, Train Acc {correct/len(X_train):.4f}, Val Loss {val_loss/len(val_loader):.4f}, Val Acc {val_correct/len(X_val):.4f}")
+
+train_model(model, train_loader, val_loader, criterion, optimizer)
+
+# Evaluate model
+def evaluate_model(model, test_loader):
+    model.eval()
+    y_pred, y_true = [], []
+    with torch.no_grad():
+        for X_batch, y_batch in test_loader:
+            X_batch, y_batch = X_batch.to(device), y_batch.to(device)
+            outputs = model(X_batch)
+            y_pred.extend(outputs.argmax(1).cpu().numpy())
+            y_true.extend(y_batch.cpu().numpy())
+    
+    print(classification_report(y_true, y_pred))
+    cm = confusion_matrix(y_true, y_pred)
+    sns.heatmap(cm, annot=True, fmt='d', cmap="Blues")
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title("Confusion Matrix")
+    plt.show()
+
+evaluate_model(model, test_loader)
+
+# Inference function
+def predict_sentiment(model, text_list):
+    model.eval()
+    tokenized_texts = [[vocab.get(word, 0) for word in word_tokenize(text.lower())] for text in text_list]
+    tokenized_texts = pad_sequences(tokenized_texts, maxlen)
+    inputs = torch.tensor(tokenized_texts, dtype=torch.long).to(device)
+    with torch.no_grad():
+        outputs = model(inputs)
+    preds = outputs.argmax(1).cpu().numpy()
+    return preds
+
+# Save model
+with open("lstm_sentiment_model.pkl", "wb") as f:
+    pickle.dump(model, f)
+print("Model saved successfully.")
