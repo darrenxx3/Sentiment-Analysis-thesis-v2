@@ -1,3 +1,14 @@
 distilbert1/
 distilbert2/
+distilbert_finetuning_result
+distilbert_optuna_final_best_model
+distilbert_optuna_result
+distilbert_oversampled1_label
+distilbert_trainer_result
+distilbert2e5_run2
+distilbert6_bestcurrentaccuracy_7000
+final_distilbert_model
 model/
+
+
+bca_preprocessed_half.csv
