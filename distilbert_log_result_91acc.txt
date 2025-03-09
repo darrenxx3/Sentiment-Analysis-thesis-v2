@@ -1,0 +1,59 @@
+from transformers import TrainingArguments, Trainer, AutoModelForSequenceClassification, EarlyStoppingCallback
+
+# load model
+model = AutoModelForSequenceClassification.from_pretrained("distilbert/distilbert-base-multilingual-cased",
+                                                           num_labels=3).to(device)
+
+# enable gpu optimizations
+torch.backends.cudnn.benchmark = True
+
+
+training_args = TrainingArguments(
+    output_dir='./distilbert_oversampling_5epoch_7000data',
+    learning_rate=3e-5,
+    num_train_epochs=5, #increase epochs
+    per_device_train_batch_size=8, #train batch size
+    per_device_eval_batch_size=8,  #eval batch size
+    eval_strategy="epoch",
+    save_strategy="epoch",  # Set save_strategy to "epoch"
+    eval_steps=500,
+    warmup_steps=100,
+    weight_decay=0.02,
+    logging_dir='./logs',
+    logging_steps=1000,
+    fp16=False,
+    push_to_hub=False,
+    load_best_model_at_end=True,
+    gradient_accumulation_steps=2, #simulates larger batch size
+    report_to="none", 
+    max_grad_norm=1.0 # clips gradient to prevent explosions
+)
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=validation_dataset,
+    tokenizer=tokenizer,
+    compute_metrics=compute_metrics,
+)
+
+trainer.train()
+
+current best accuracy:
+
+5 Epoch with LR 3e-5 fp16 False, batch size = 8, grad acc = 1 7000 dataset
+, oversampled, rerun 3, max_grad norm = 1.0, grad acc= 2
+              precision    recall  f1-score   support
+
+    NEGATIVE       0.86      0.86      0.86       418
+     NEUTRAL       0.95      0.98      0.96       418
+    POSITIVE       0.90      0.89      0.89       419
+
+    accuracy                           0.91      1255
+   macro avg       0.91      0.91      0.91      1255
+weighted avg       0.91      0.91      0.91      1255
+
+
+trainer.save_model("distilbert6_bestcurrentaccuracy_7000")
+tokenizer.save_pretrained("distilbert6_bestcurrentaccuracy_7000")
