@@ -1,0 +1,99 @@
+3e-5 dengan 3 epoch, 27m 52.5s
+{'eval_loss': 0.4619099199771881, 'eval_accuracy': 0.8475409836065574, 'eval_runtime': 16.8788, 'eval_samples_per_second': 108.42, 'eval_steps_per_second': 13.567, 'epoch': 3.0}
+{'train_runtime': 1670.5303, 'train_samples_per_second': 26.291, 'train_steps_per_second': 1.643, 'train_loss': 0.5347214606724584, 'epoch': 3.0}
+
+Train 84,75%
+3 Epochs, LR 3e-5 fp16 False, train&eval batch size = 8, max_grad_norm = 1.0, gradient_accumulation= 2
+Test Accuracy: 84.43%
+
+              precision    recall  f1-score   support
+
+    NEGATIVE       0.85      0.83      0.84       745
+     NEUTRAL       0.81      0.95      0.87       543
+    POSITIVE       0.88      0.76      0.81       543
+
+    accuracy                           0.84      1831
+   macro avg       0.85      0.85      0.84      1831
+weighted avg       0.85      0.84      0.84      1831
+
+================================================================================================
+
+3e-5, 5 epoch, 46m 2.9s
+{'eval_loss': 0.5419952273368835, 'eval_accuracy': 0.8612021857923498, 'eval_runtime': 16.247, 'eval_samples_per_second': 112.636, 'eval_steps_per_second': 14.095, 'epoch': 5.0}
+{'train_runtime': 2760.7723, 'train_samples_per_second': 26.514, 'train_steps_per_second': 1.657, 'train_loss': 0.39875537476252987, 'epoch': 5.0}
+
+Train 86.12%
+5 Epochs, LR 3e-5 fp16 False, train&eval batch size = 8, max_grad_norm = 1.0, gradient_accumulation= 2
+Test Accuracy: 86.89%
+
+              precision    recall  f1-score   support
+
+    NEGATIVE       0.83      0.90      0.87       745
+     NEUTRAL       0.88      0.96      0.92       543
+    POSITIVE       0.91      0.73      0.81       543
+
+    accuracy                           0.87      1831
+   macro avg       0.88      0.86      0.87      1831
+weighted avg       0.87      0.87      0.87      1831
+
+=================================================================================================
+
+3e-5, 8 epoch, 71m 58.2s
+{'eval_loss': 0.7775845527648926, 'eval_accuracy': 0.8732240437158469, 'eval_runtime': 16.1646, 'eval_samples_per_second': 113.21, 'eval_steps_per_second': 14.167, 'epoch': 8.0}
+{'train_runtime': 4305.7622, 'train_samples_per_second': 27.201, 'train_steps_per_second': 1.7, 'train_loss': 0.28967431229971796, 'epoch': 8.0}
+
+8 Epochs, LR 3e-5 fp16 False, train&eval batch size = 8, max_grad_norm = 1.0, gradient_accumulation= 2
+Test Accuracy: 87.27%
+
+              precision    recall  f1-score   support
+
+    NEGATIVE       0.85      0.87      0.86       745
+     NEUTRAL       0.90      0.98      0.94       543
+    POSITIVE       0.88      0.77      0.82       543
+
+    accuracy                           0.87      1831
+   macro avg       0.88      0.87      0.87      1831
+weighted avg       0.87      0.87      0.87      1831
+
+===================================================================================================
+
+2e-5 , 3 epoch
+{'eval_loss': 0.4777633547782898, 'eval_accuracy': 0.8327868852459016, 'eval_runtime': 16.3342, 'eval_samples_per_second': 112.035, 'eval_steps_per_second': 14.02, 'epoch': 3.0}
+{'train_runtime': 1615.5514, 'train_samples_per_second': 27.186, 'train_steps_per_second': 1.699, 'train_loss': 0.5748066775351491, 'epoch': 3.0}
+
+Train 8327
+3 Epochs, LR 2e-5 fp16 False, train&eval batch size = 8, max_grad_norm = 1.0, gradient_accumulation= 2
+Test Accuracy: 83.67%
+
+              precision    recall  f1-score   support
+
+    NEGATIVE       0.83      0.83      0.83       745
+     NEUTRAL       0.79      0.94      0.86       543
+    POSITIVE       0.91      0.74      0.81       543
+
+    accuracy                           0.84      1831
+   macro avg       0.84      0.84      0.84      1831
+weighted avg       0.84      0.84      0.84      1831
+
+OPTUNA integration
+[I 2025-03-06 17:46:01,120] Trial 1 finished with value: 0.8987240829346093 and parameters: {'learning_rate': 2.45571600427136e-05, 'num_train_epochs': 4, 'batch_size': 4, 'weight_decay': 0.00015795143173370164, 'max_grad_norm': 0.11129287885119829, 'gradient_accumulation_steps': 3}. Best is trial 1 with value: 0.8987240829346093.
+Best Hyperparameters: {'learning_rate': 2.45571600427136e-05, 'num_train_epochs': 4, 'batch_size': 4, 'weight_decay': 0.00015795143173370164, 'max_grad_norm': 0.11129287885119829, 'gradient_accumulation_steps': 3}
+Best Trial: FrozenTrial(number=1, state=TrialState.COMPLETE, values=[0.8987240829346093], datetime_start=datetime.datetime(2025, 3, 6, 17, 15, 11, 358161), datetime_complete=datetime.datetime(2025, 3, 6, 17, 46, 1, 120060), params={'learning_rate': 2.45571600427136e-05, 'num_train_epochs': 4, 'batch_size': 4, 'weight_decay': 0.00015795143173370164, 'max_grad_norm': 0.11129287885119829, 'gradient_accumulation_steps': 3}, user_attrs={}, system_attrs={}, intermediate_values={}, distributions={'learning_rate': FloatDistribution(high=5e-05, log=True, low=1e-05, step=None), 'num_train_epochs': IntDistribution(high=4, log=False, low=3, step=1), 'batch_size': CategoricalDistribution(choices=(4, 8)), 'weight_decay': FloatDistribution(high=0.0005, log=True, low=1e-05, step=None), 'max_grad_norm': FloatDistribution(high=1.0, log=True, low=0.1, step=None), 'gradient_accumulation_steps': IntDistribution(high=4, log=False, low=2, step=1)}, trial_id=1, value=None)
+Index(['number', 'value', 'datetime_start', 'datetime_complete', 'duration',
+       'params_batch_size', 'params_gradient_accumulation_steps',
+       'params_learning_rate', 'params_max_grad_norm',
+       'params_num_train_epochs', 'params_weight_decay', 'state'],
+      dtype='object')
+ number    value             datetime_start          datetime_complete               duration  params_batch_size  params_gradient_accumulation_steps  params_learning_rate  params_max_grad_norm  params_num_train_epochs  params_weight_decay    state
+      0 0.881180 2025-03-06 16:42:44.333028 2025-03-06 17:15:11.357161 0 days 00:32:27.024133                  4                                   3              0.000015              0.742391                        4             0.000261 COMPLETE
+      1 0.898724 2025-03-06 17:15:11.358161 2025-03-06 17:46:01.120060 0 days 00:30:49.761899                  4                                   3              0.000025              0.111293                        4             0.000158 COMPLETE
+
+
+optuna_fixed
+[I 2025-03-08 13:40:00,141] Trial 2 finished with value: 0.9138755980861244 and parameters: {'learning_rate': 2.5026838173559924e-05, 'num_train_epochs': 5, 'batch_size': 4, 'weight_decay': 0.00010148240166534687, 'max_grad_norm': 0.8837484398572918, 'gradient_accumulation_steps': 2}. Best is trial 2 with value: 0.9138755980861244.
+Best Hyperparameters: {'learning_rate': 2.5026838173559924e-05, 'num_train_epochs': 5, 'batch_size': 4, 'weight_decay': 0.00010148240166534687, 'max_grad_norm': 0.8837484398572918, 'gradient_accumulation_steps': 2}
+Best Trial: FrozenTrial(number=2, state=TrialState.COMPLETE, values=[0.9138755980861244], datetime_start=datetime.datetime(2025, 3, 8, 13, 4, 32, 313299), datetime_complete=datetime.datetime(2025, 3, 8, 13, 40, 0, 141424), params={'learning_rate': 2.5026838173559924e-05, 'num_train_epochs': 5, 'batch_size': 4, 'weight_decay': 0.00010148240166534687, 'max_grad_norm': 0.8837484398572918, 'gradient_accumulation_steps': 2}, user_attrs={}, system_attrs={}, intermediate_values={}, distributions={'learning_rate': FloatDistribution(high=3e-05, log=True, low=1e-05, step=None), 'num_train_epochs': IntDistribution(high=5, log=False, low=4, step=1), 'batch_size': CategoricalDistribution(choices=(4, 8)), 'weight_decay': FloatDistribution(high=0.001, log=True, low=0.0001, step=None), 'max_grad_norm': FloatDistribution(high=1.0, log=True, low=0.5, step=None), 'gradient_accumulation_steps': IntDistribution(high=4, log=False, low=2, step=1)}, trial_id=2, value=None)
+ Trial  Train Accuracy  Batch Size  Grad Accumulation Steps  Learning Rate  Max Grad Norm  Epochs  Weight Decay   Status
+     0        0.892344           8                        4       0.000021       0.673337       5      0.000234 COMPLETE
+     1        0.874801           4                        3       0.000016       0.618198       4      0.000332 COMPLETE
+     2        0.913876           4                        2       0.000025       0.883748       5      0.000101 COMPLETE
