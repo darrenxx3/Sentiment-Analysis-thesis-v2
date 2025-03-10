@@ -10,8 +10,8 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 def load_model():
     """Load the trained DistilBERT model and tokenizer"""
-    model_path = "model/distilbert_1_model3epoch.pkl"
-    tokenizer_path = "model/tokenizer_3epoch.pkl"
+    model_path = "model/distilbert_bestoptuna.pkl"
+    tokenizer_path = "model/tokenizer_distilbert_bestoptuna.pkl"
 
     with open(model_path, "rb") as f:
         model = pickle.load(f)
