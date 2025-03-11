@@ -14,7 +14,7 @@ warnings.filterwarnings("ignore")  # Ignore all warnings
 from utils import load_model
 
 
-# for adding pictures
+# Store for adding pictures
 Sentiment_picture = {
     0: "./img/sad.jpg",
     1: "./img/netralface.jpeg",
@@ -29,9 +29,9 @@ st.title("Sentiment Analysis Test📈")
 st.subheader("Hey, use this sentiment analyzer! It's easy to use", divider="blue")
 
 #user input
-text = st.text_area("Type here","")
+text = st.text_input("Type here","")
 
-col1, col2 = st.columns([0.9, 1]) #creating columns
+col1, col2 = st.columns([0.9, 1]) #creating columns of 2
 with col1:
     if st.button("Predict"):
         if text:   
@@ -76,7 +76,7 @@ with col1:
             st.warning("Please enter text before predicting.😁")
 
 # Using uploaded file
-st.subheader("Upload CSV file for sentiment analysis🙏", divider="red")
+st.subheader("Option 2: Via Upload CSV file for sentiment analysis🙏", divider="red")
 
 uploaded_file = st.file_uploader("Choose a file", type=["csv"])
 if uploaded_file is not None:
