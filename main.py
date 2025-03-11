@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore")  # Ignore all warnings
 from utils import load_model
 
 # adding background image
-def set_bg_hack(main_bg):
+def set_bg_image(main_bg):
     '''
     A function to unpack an image from root folder and set as bg.
  
@@ -37,7 +37,7 @@ def set_bg_hack(main_bg):
          """,
          unsafe_allow_html=True
      )
-set_bg_hack("./img/chizuru_beloved.png")
+set_bg_image("./img/senti_bg.jpg")
 
 # Store for adding pictures
 Sentiment_picture = {
@@ -50,11 +50,11 @@ Sentiment_picture = {
 model, tokenizer = load_model()
 
 # Streamlit UI
-st.title("Sentiment Analysis Test📈")
+st.title("Sentiment Analyzer Test📈")
 st.subheader("Hey, use this sentiment analyzer! It's easy to use", divider="blue")
 
 #user input
-text = st.text_input("Type here","")
+text = st.text_input(label="", placeholder="Type here")
 
 col1, col2 = st.columns([0.9, 1]) #creating columns of 2
 with col1:
@@ -81,7 +81,7 @@ with col1:
 
                 # Display image corresponding emoji image
                 image_loc = Sentiment_picture[sentiment]
-                st.image(image_loc, width=200)
+                st.image(image_loc, width=250)
             
             with col2:
                 alt_viz = pd.DataFrame({    
@@ -95,18 +95,20 @@ with col1:
                     y="Score",
                     color="Sentiment Class"
                 )
-
                 st.altair_chart(chart, use_container_width=True)
+                st.write(alt_viz) # add table below the altair chart
+                
         else:
             st.warning("Please enter text before predicting.😁")
 
-# Using uploaded file
+# Using uploaded file option
 st.subheader("Option 2: Via Upload CSV file for sentiment analysis🙏", divider="red")
 
+col1, col2 = st.columns([0.9, 1]) #creating columns of 2
 uploaded_file = st.file_uploader("Choose a file", type=["csv"])
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
-    
+
     if 'content' not in df.columns:
         st.error("The file must have 'content' column")
     else:
@@ -118,19 +120,19 @@ if uploaded_file is not None:
                 sentiment = torch.argmax(probs, dim=-1).item()
                 sentiment_labels = {0: "Negative", 1: "Neutral", 2: "Positive"}
                 confidence_level = probs[0][sentiment].item()
-            return sentiment_labels[sentiment], confidence_level
+            return confidence_level, sentiment_labels[sentiment] 
 
-        df[['Predicted Sentiment', 'Confidence']] = df['content'].apply(lambda x: pd.Series(predict_sentiment(str(x))))
+        df[['Confidence', 'Predicted Sentiment']] = df['content'].apply(lambda x: pd.Series(predict_sentiment(str(x))))
 
         # Display Results
         st.subheader("Results")
-        st.dataframe(df)
-        
+        st.dataframe(df, use_container_width=True)
+            
         #download results
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button("Download Results", csv, "bca_classification.csv", "text/csv")
 
-# footer
+# page footer
 footer ="""
 <style>
 .footer {
@@ -145,7 +147,7 @@ footer ="""
 }
 </style>
 <div class="footer">
-    <p>Copyright © 2025 Made by 💘 by Christopher Darren. All rights reserved.</p>
+    <p><b>Copyright © 2025</b> Made in 💘 by <b>Christopher Darren</b>. All rights reserved.</p>
 </div>
 """
 st.markdown(footer, unsafe_allow_html=True)
