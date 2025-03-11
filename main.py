@@ -9,6 +9,8 @@ import torch
 import torch.nn.functional as F
 import pandas as pd
 import altair as alt
+import warnings
+warnings.filterwarnings("ignore")  # Ignore all warnings
 from utils import load_model
 
 
@@ -56,22 +58,22 @@ with col1:
                 image_loc = Sentiment_picture[sentiment]
                 st.image(image_loc, width=200)
             
-        with col2:
-            alt_viz = pd.DataFrame({
-                "Sentiment Class":["Negative","Neutral","Positive"],
-                "Score":[negative_score, neutral_score, positive_score] 
-            })
+            with col2:
+                alt_viz = pd.DataFrame({    
+                    "Sentiment Class":["Negative","Neutral","Positive"],
+                    "Score":[float(negative_score), float(neutral_score), float(positive_score)]
+                })
 
-            # Create bar
-            chart = alt.Chart(alt_viz).mark_bar().encode(
-                x=alt.X("Sentiment Class", sort=["Negative","Neutral","Positive"]),
-                y="Score",
-                color="Sentiment Class"
-            )
+                # Create bar
+                chart = alt.Chart(alt_viz).mark_bar().encode(
+                    x=alt.X("Sentiment Class", sort=["Negative","Neutral","Positive"]),
+                    y="Score",
+                    color="Sentiment Class"
+                )
 
-            st.altair_chart(chart, use_container_width=True)
-    else:
-        st.warning("Please enter text before predicting.😁")
+                st.altair_chart(chart, use_container_width=True)
+        else:
+            st.warning("Please enter text before predicting.😁")
 
 # Using uploaded file
 st.subheader("Upload CSV file for sentiment analysis🙏", divider="red")
