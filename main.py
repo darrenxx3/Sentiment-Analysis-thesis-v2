@@ -104,3 +104,23 @@ if uploaded_file is not None:
         #download results
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button("Download Results", csv, "bca_classification.csv", "text/csv")
+
+# footer
+footer ="""
+<style>
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #f0f0f0; 
+    color: #333; /*text color*/
+    text-align: center;
+    padding: 5px 0;
+}
+</style>
+<div class="footer">
+    <p>Copyright © 2025 Made by 💘 by Christopher Darren. All rights reserved.</p>
+</div>
+"""
+st.markdown(footer, unsafe_allow_html=True)
