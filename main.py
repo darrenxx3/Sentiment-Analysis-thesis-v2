@@ -9,10 +9,35 @@ import torch
 import torch.nn.functional as F
 import pandas as pd
 import altair as alt
+import base64
 import warnings
 warnings.filterwarnings("ignore")  # Ignore all warnings
 from utils import load_model
 
+# adding background image
+def set_bg_hack(main_bg):
+    '''
+    A function to unpack an image from root folder and set as bg.
+ 
+    Returns
+    -------
+    The background.
+    '''
+    # set bg name
+    main_bg_ext = "png"
+        
+    st.markdown(
+         f"""
+         <style>
+         .stApp {{
+             background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()}) no-repeat center center fixed;
+             background-size: cover
+         }}
+         </style>
+         """,
+         unsafe_allow_html=True
+     )
+set_bg_hack("./img/chizuru_beloved.png")
 
 # Store for adding pictures
 Sentiment_picture = {
