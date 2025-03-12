@@ -23,7 +23,7 @@ def set_bg_image(main_bg):
     -------
     The background.
     '''
-    # set bg name
+    # set background image name
     main_bg_ext = "png"
         
     st.markdown(
@@ -31,7 +31,7 @@ def set_bg_image(main_bg):
          <style>
          .stApp {{
              background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()}) no-repeat center center fixed;
-             background-size: cover
+             background-size: cover;
          }}
          </style>
          """,
@@ -122,13 +122,14 @@ if uploaded_file is not None:
                 confidence_level = probs[0][sentiment].item()
             return confidence_level, sentiment_labels[sentiment] 
 
+        # adding automatic column after file being processed
         df[['Confidence', 'Predicted Sentiment']] = df['content'].apply(lambda x: pd.Series(predict_sentiment(str(x))))
 
-        # Display Results
+        # Display Results into table
         st.subheader("Results")
         st.dataframe(df, use_container_width=True)
             
-        #download results
+        #download results as csv
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button("Download Results", csv, "bca_classification.csv", "text/csv")
 
