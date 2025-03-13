@@ -53,6 +53,8 @@ model, tokenizer = load_model()
 st.title("Sentiment Analyzer Test📈")
 st.subheader("Hey, use this sentiment analyzer! It's easy to use", divider="blue")
 
+df = None # make sure there's no dataset detected before being uploaded to Streamlit
+
 #user input
 text = st.text_input(label="", placeholder="Type here")
 
@@ -81,7 +83,7 @@ with col1:
 
                 # Display image corresponding emoji image
                 image_loc = Sentiment_picture[sentiment]
-                st.image(image_loc, width=250)
+                st.image(image_loc, width=250, caption={sentiment_labels[sentiment]})
             
             with col2:
                 alt_viz = pd.DataFrame({    
@@ -104,7 +106,7 @@ with col1:
 # Using uploaded file option
 st.subheader("Option 2: Via Upload CSV file for sentiment analysis🙏", divider="red")
 
-col1, col2 = st.columns([0.9, 1]) #creating columns of 2
+
 uploaded_file = st.file_uploader("Choose a file", type=["csv"])
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
@@ -125,13 +127,41 @@ if uploaded_file is not None:
         # adding automatic column after file being processed
         df[['Confidence', 'Predicted Sentiment']] = df['content'].apply(lambda x: pd.Series(predict_sentiment(str(x))))
 
-        # Display Results into table
-        st.subheader("Results")
-        st.dataframe(df, use_container_width=True)
-            
-        #download results as csv
-        csv = df.to_csv(index=False).encode('utf-8')
-        st.download_button("Download Results", csv, "bca_classification.csv", "text/csv")
+        # adding for KPI metric cards
+        sentiment_counts = df['Predicted Sentiment'].value_counts(normalize=True)* 100
+        positive_met = sentiment_counts.get("Positive",0)
+        neutral_met = sentiment_counts.get("Neutral",0)
+        negative_met = sentiment_counts.get("Negative",0)
+
+        sentiment_avg_score = sentiment_counts.idxmax()
+        sentiment_percentage = sentiment_counts.max() # get sentiment percentage per label
+        
+        col1, col2, col3 = st.columns(3) # creating 3 columns
+    with col1:
+        st.metric(label=f"Sentiment Positive:",
+                value=f"{positive_met:.1f}%",
+                delta=None)
+        
+    with col2:
+        st.metric(label=f"Sentiment Neutral:",
+                value=f"{neutral_met:.1f}%",
+                delta=None)
+    with col3:
+        st.metric(label=f"Sentiment Negative:",
+                value=f"{negative_met:.1f}%",
+                delta=None)
+        
+# Display Results into table
+
+if df is not None:
+    st.subheader("Results")
+    st.dataframe(df, use_container_width=True)
+    #download results as csv
+    csv = df.to_csv(index=False).encode('utf-8')
+    st.download_button("Download Results", csv, "bca_classification.csv", "text/csv")
+else:
+    st.warning("Please add file for analyzing the content")
+
 
 # page footer
 footer ="""
