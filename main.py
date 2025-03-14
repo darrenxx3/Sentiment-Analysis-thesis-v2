@@ -98,7 +98,7 @@ with col1:
                     color="Sentiment Class"
                 )
                 st.altair_chart(chart, use_container_width=True)
-                st.write(alt_viz) # add table below the altair chart
+                st.dataframe(alt_viz, use_container_width=True) # add table below the altair chart
                 
         else:
             st.warning("Please enter text before predicting.😁")
