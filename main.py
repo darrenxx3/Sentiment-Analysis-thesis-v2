@@ -136,7 +136,7 @@ if uploaded_file is not None:
         sentiment_avg_score = sentiment_counts.idxmax()
         sentiment_percentage = sentiment_counts.max() # get sentiment percentage per label
         
-        col1, col2, col3 = st.columns(3) # creating 3 columns
+    col1, col2, col3 = st.columns(3) # creating 3 columns
     with col1:
         st.metric(label=f"Sentiment Positive:",
                 value=f"{positive_met:.1f}%",
