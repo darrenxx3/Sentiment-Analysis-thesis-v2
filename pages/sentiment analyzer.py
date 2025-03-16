@@ -14,6 +14,9 @@ import warnings
 warnings.filterwarnings("ignore")  # Ignore all warnings
 from utils import load_model
 
+# page configuration
+st.set_page_config(layout="centered")
+
 # adding background image
 def set_bg_image(main_bg):
     '''

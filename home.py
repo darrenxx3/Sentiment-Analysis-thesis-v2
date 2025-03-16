@@ -6,7 +6,9 @@ import streamlit as st
 # deploy_page = st.Page("pages/sentiment analyzer.py", title="", icon="🚀")
 
 # pg = st.navigation([data_page, model_page, deploy_page])
-st.set_page_config(page_title="Home | Sentiment Analysis BCA Mobile from Google PlayStore")
+
+# page configuration
+st.set_page_config(page_title="Home | Sentiment Analysis BCA Mobile from Google PlayStore", layout="centered")
 # pg.run()
 st.title("Sentiment Analysis Final Project by :rainbow[Christopher Darren]")
 
