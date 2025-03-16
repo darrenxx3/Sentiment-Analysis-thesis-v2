@@ -150,9 +150,9 @@ if uploaded_file is not None:
         st.metric(label=f"Sentiment Negative:",
                 value=f"{negative_met:.1f}%",
                 delta=None)
+
         
 # Display Results into table
-
 if df is not None:
     st.subheader("Results")
     st.dataframe(df, use_container_width=True)
