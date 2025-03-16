@@ -136,20 +136,20 @@ if uploaded_file is not None:
         sentiment_avg_score = sentiment_counts.idxmax()
         sentiment_percentage = sentiment_counts.max() # get sentiment percentage per label
         
-    col1, col2, col3 = st.columns(3) # creating 3 columns
-    with col1:
-        st.metric(label=f"Sentiment Positive:",
-                value=f"{positive_met:.1f}%",
-                delta=None)
-        
-    with col2:
-        st.metric(label=f"Sentiment Neutral:",
-                value=f"{neutral_met:.1f}%",
-                delta=None)
-    with col3:
-        st.metric(label=f"Sentiment Negative:",
-                value=f"{negative_met:.1f}%",
-                delta=None)
+        col1, col2, col3 = st.columns(3) # creating 3 columns
+        with col1:
+            st.metric(label=f"Sentiment Positive:",
+                    value=f"{positive_met:.1f}%",
+                    delta=None, border=True)
+            
+        with col2:
+            st.metric(label=f"Sentiment Neutral:",
+                    value=f"{neutral_met:.1f}%",
+                    delta=None, border=True)
+        with col3:
+            st.metric(label=f"Sentiment Negative:",
+                    value=f"{negative_met:.1f}%",
+                    delta=None, border=True)
 
         
 # Display Results into table
@@ -160,7 +160,7 @@ if df is not None:
     csv = df.to_csv(index=False).encode('utf-8')
     st.download_button("Download Results", csv, "bca_classification.csv", "text/csv")
 else:
-    st.warning("Please add file for analyzing the content")
+    st.warning("Please add file first for analyzing the content😌")
 
 
 # page footer
