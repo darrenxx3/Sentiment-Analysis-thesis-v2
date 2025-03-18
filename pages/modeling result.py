@@ -4,56 +4,56 @@ import altair as alt
 import pydeck as pdk
 import plotly.express as px
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide", page_icon="🤖")
 st.title("Training & Evaluation Result🚅")
 
 st.header("LSTM Result⏲")
-col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3, border=True, vertical_alignment="center")
 
 with col1:
-    st.image("https://i.redd.it/v75t68xjxmi51.jpg")
+    st.image("img/lstm_clacreport1.png")
     st.subheader("Classification Report")
 with col2:
-    st.image("https://api.duniagames.co.id/api/content/upload/file/5672193221657192439.jpg")
+    st.image("img/lstm_conf.png")
     st.subheader("Confusion Matrix")
 
 with col3:
-    st.image("https://assets.ggwp.id/2023/06/fakta-menarik-Ichinose-Chizuru-featured-640x360.jpg")
+    st.image("img/lstm_train_loss1.png")
     st.subheader("Train and Validation Loss")
 st.markdown("---") #divider
 
 st.header("DistilBERT Result")
-col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3, border=True, vertical_alignment="center")
 with col1:
-    st.image("https://i.redd.it/v75t68xjxmi51.jpg")
+    st.image("img/distilbert_clacreport1.png")
     st.subheader("Classification Report")
 
 with col2:
-    st.image("https://api.duniagames.co.id/api/content/upload/file/5672193221657192439.jpg")
+    st.image("img/distilbert_conf.png")
     st.subheader("Confusion Matrix")
 
 with col3:
-    st.image("https://assets.ggwp.id/2023/06/fakta-menarik-Ichinose-Chizuru-featured-640x360.jpg")
+    st.image("img/distilbert_train_loss1.png")
     st.subheader("Train and Validation Loss")
 st.markdown("---") #divider
 
 st.header("DistilBERT+Optuna Result🎯")
-col1, col2 = st.columns(2)
-col3, col4 = st.columns(2)
+col1, col2 = st.columns(2, border=True)
+col3, col4 = st.columns(2, border=True)
 with col1:
-    st.image("https://i.redd.it/v75t68xjxmi51.jpg")
+    st.image("img/optuna_hyperparameter.png")
     st.subheader("Hyperparameter Importance")
 
 with col2:
-    st.image("https://api.duniagames.co.id/api/content/upload/file/5672193221657192439.jpg")
+    st.image("img/optuna_clacreport.png")
     st.subheader("Classification Report")
 
 with col3:
-    st.image("https://assets.ggwp.id/2023/06/fakta-menarik-Ichinose-Chizuru-featured-640x360.jpg")
+    st.image("img/optuna_conf.png")
     st.subheader("Confusion Matrix")
 
 with col4:
-    st.image("https://doublesama.com/wp-content/uploads/2022/08/Kanokari-2nd-Season-Episode-6-Chizuru-on-her-balcony.jpg")
+    st.image("img/optuna_train_loss.png")
     st.subheader("Train and Validation Loss")
 
 # page footer
