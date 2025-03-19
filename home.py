@@ -14,9 +14,11 @@ st.title("Sentiment Analysis Final Project by :rainbow[Christopher Darren]")
 
 st.header("What's this project about?")
 st.write("This project revolves around sentiment analysis exploration project of mobile banking review app called BCA Mobile on Google PlayStore.")
-st.header("🔍Features")
+st.header("🔍What can you see?")
 st.markdown("- **Data Exploration:** Explore visualization of BCA Mobile Review from Google PlayStore.")
-st.markdown("- **Sentiment Classification Analyzer:** Classify using the Transformer Model (DistilBERT).")
+st.markdown("- **Model Results:** See each model results graph after training.")
+st.markdown("- **Sentiment Classification Analyzer:** Classify text using the Transformer Model (DistilBERT).")
+
 
 # page footer
 footer ="""
