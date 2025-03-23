@@ -1,3 +1,10 @@
+"""
+
+modeling result.py
+
+a result for see trained model, and evaluation including confusion matrix, train loss vis
+"""
+
 import streamlit as st
 import pandas as pd
 import altair as alt
