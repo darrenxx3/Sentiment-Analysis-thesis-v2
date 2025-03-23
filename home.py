@@ -1,5 +1,5 @@
 import streamlit as st
-
+import base64
 
 # data_page = st.Page("pages/data exploration.py", title="", icon="🌍")
 # model_page = st.Page("pages/modeling result.py", title="", icon="🚗")
@@ -13,10 +13,11 @@ st.set_page_config(page_title="Home | Sentiment Analysis BCA Mobile from Google 
 st.title("Sentiment Analysis Final Project by :rainbow[Christopher Darren]")
 
 st.header("What's this project about?")
-st.write("This project revolves around sentiment analysis exploration project of mobile banking review app called BCA Mobile on Google PlayStore.")
-st.header("🔍What can you see?")
+st.write("This project revolves around sentiment analysis exploration project of mobile banking review app called BCA Mobile on Google PlayStore and a classifier model to classify text within the polarity of positive, negative or neutral text.")
+st.write("To get start, choose what page do you want to see at sidebar of the page👈. For mobile _users_ see the sidebar on top of the page☝.")
+st.header("🔍What can you do on this website?")
 st.markdown("- **Data Exploration:** Explore visualization of BCA Mobile Review from Google PlayStore.")
-st.markdown("- **Model Results:** See each model results graph after training.")
+st.markdown("- **Model Results:** See each model results visualization after training and evaluation.")
 st.markdown("- **Sentiment Classification Analyzer:** Classify text using the Transformer Model (DistilBERT).")
 
 
