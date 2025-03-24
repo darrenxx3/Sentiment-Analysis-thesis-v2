@@ -10,10 +10,44 @@ import pandas as pd
 import altair as alt
 import pydeck as pdk
 import plotly.express as px
+import base64
+import matplotlib.pyplot as plt
+import gensim
+import gensim.corpora as corpora
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+import re
+import nltk
+from collections import defaultdict
 
 
 # page configuration
 st.set_page_config(layout="wide", page_icon="💨")
+
+# # adding background image
+# def set_bg_image(main_bg):
+#     '''
+#     A function to unpack an image from root folder and set as bg.
+ 
+#     Returns
+#     -------
+#     The background.
+#     '''
+#     # set background image name
+#     main_bg_ext = "png"
+        
+#     st.markdown(
+#          f"""
+#          <style>
+#          .stApp {{
+#              background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()}) no-repeat center center fixed;
+#              background-size: cover;
+#          }}
+#          </style>
+#          """,
+#          unsafe_allow_html=True
+#      )
+# set_bg_image("./img/vecteezy_businessman.jpg")
 
 # Ui
 st.title("Exploration Data Analysis🌐")
@@ -21,11 +55,12 @@ st.markdown("---")
 
 #load dataset
 df = pd.read_csv("bca_preprocessed_data_stlit.csv", delimiter=',')
+df= df.dropna()
 df = df.rename(columns={"rating": "score"})
 
 #set columns
 col1, col2 = st.columns(2, border=True)
-col3, col4 = st.columns([1.5,1], border=True)
+col3, col4 = st.columns([1.3,1], border=True)
 
 with col1:
     score_counts  = df["score"].value_counts().sort_index()
@@ -66,6 +101,7 @@ with col3:
     sentiment_map = {0: "Negative", 1:"Neutral", 2:"Positive"} #translate and mapping labels
     sentiment_line["Sentiment"] = sentiment_line["sentiment"].map(sentiment_map)
 
+    # creating the filter dropdown
     sentiment_option = ["All"] + list(sentiment_map.values()) # No filter added
     selected_sentiment = st.selectbox("Select:", sentiment_option) #creating the select box
 
@@ -82,9 +118,82 @@ with col3:
     st.altair_chart(chart, use_container_width=True)
     
 with col4:
-    from wordcloud import WordCloud
+    #ensure NLTK downloaded
+    nltk.download("punkt")
+    nltk.download("stopwords")
+
+    df = pd.read_csv("bca_preprocessed_data_stlit.csv", delimiter=',')
+    df = df.dropna(subset=["content"])
+
+    stop_words_indo = set(stopwords.words("indonesian"))
+    stop_words_en = set(stopwords.words("english"))
+    custom_stopwords = {"nya", "yg", "gak", "ga", "sih", "dong", "deh", "nih", "aja", "bgt","saya", "dan","sdh","sudah"
+                    ,"sy","lg","tdk", "udah","lagi"}
+
+    stop_words = stop_words_indo.union(stop_words_en, custom_stopwords)
+
+    def preprocess_text(text):
+        text = text.lower() #c onvert to lowercase
+        text = re.sub(r'\d+', '',text) # remove numbers
+        text = re.sub(r'[^\w\s]','',text) # remove special characters
+        text = re.sub(r'(.)\1+', r'\1\1', text) #limit repeating characters
+        tokens = word_tokenize(text)
+        tokens = [word for word in tokens if word not in stop_words]
+        return tokens
+
+    df["processedwords"] = df["content"].apply(preprocess_text)
+
+    dictionary = corpora.Dictionary(df["processedwords"])
+    corpus = [dictionary.doc2bow(text)for text in df["processedwords"]]
     
-    st.subheader("WordCloud")
+    lda_model = gensim.models.LdaModel(corpus=corpus,
+                                   id2word=dictionary,
+                                   num_topics=5,
+                                   random_state=42,
+                                   passes=10)
+
+    # LDA results 
+    topic_counts = lda_model.get_document_topics(corpus, minimum_probability=0)
+    topic_distributions = [0] * 5
+    topic_mapping = {
+    0: 2,  # Topic 0 -> "App Features & Performance"
+    1: 3,  # Topic 1 -> "Update & Force Closes issues"
+    2: 1,  # Topic 2 -> "Balance & Transactions"
+    3: 4,  # Topic 3 -> "English Reviews"
+    4: 0   # Topic 4 -> "Verification & Login issues"
+    } 
+
+    for doc in topic_counts:
+        main_topic = max(doc, key=lambda x: x[1])[0] #get most relevant topic
+        mapped_topic = topic_mapping[main_topic] #map predefined labels
+        topic_distributions[mapped_topic] += 1
+    
+    topic_labels =[
+    "Verification & Login issues",
+    "Balance & Transactions",
+    "App Features & Performance",
+    "Update & Force Closes issues",
+    "English Reviews"
+    ]
+    
+    # convert to dataframe for streamlit
+    topic_df = pd.DataFrame({"Topic": topic_labels, "Count":topic_distributions})
+
+    #creating the plot requirements
+    fig = px.bar(
+        topic_df, x="Topic", y="Count", text="Count", color="Topic", title="Topic Distributions on BCA Mobile Reviews",
+        labels={"Count": "Review Count"},
+        template="plotly_white"
+    )
+    fig.update_traces(textposition="outside")
+
+    # display plot
+    st.plotly_chart(fig)
+
+    # st.subheader("Topics")
+    # topics = lda_model.print_topics(num_words=10)
+    # for i, topic in enumerate(topics):
+    #     st.write(f"**Topic {i+1}:** {topic[1]}")
 
 
 # page footer
