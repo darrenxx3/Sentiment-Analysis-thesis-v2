@@ -83,7 +83,7 @@ with col2:
                     x=alt.X('Sentiment Label:N', title='Sentiment Label', axis=alt.Axis(labelAngle=-45)),
                     y=alt.Y('Number of Reviews:Q', title='Number of Reviews'),
                     color=alt.Color('Star Rating:N', legend=alt.Legend(title="Sentiment label"))).properties(
-                    title="BCA Mobile PlayStore Reviews Count applied with LDA technique")
+                    title="BCA Mobile PlayStore Reviews Count applied with Rule-based technique")
     st.altair_chart(chart, use_container_width=True)
 
 with col3:
@@ -114,7 +114,7 @@ with col3:
         x=alt.X('Month-Year:O', title='Month Year', axis=alt.Axis(labelAngle=-45)),
                     y=alt.Y('Count:Q', title='Number of Reviews'),
                     color=alt.Color('Sentiment:N', legend=alt.Legend(title="Sentiment label Type"))).properties(
-                    title="Sentiment Trend Over time from 2022 - 2025 applied with LDA technique")
+                    title="Sentiment Trend Over time from 2022 - 2025 applied with Ruled-based technique")
     st.altair_chart(chart, use_container_width=True)
     
 with col4:
