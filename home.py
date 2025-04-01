@@ -20,6 +20,9 @@ st.markdown("- **Data Exploration:** Explore visualization of BCA Mobile Review 
 st.markdown("- **Model Results:** See each model results visualization after training and evaluation.")
 st.markdown("- **Sentiment Classification Analyzer:** Classify text using the Transformer Model (DistilBERT).")
 
+st.markdown("---")
+st.write("N.B : **For sentiment classifier testing, the scope only being specific using BCA Mobile text only❗, please test with BCA Mobile data🙏**")
+
 
 # page footer
 footer ="""

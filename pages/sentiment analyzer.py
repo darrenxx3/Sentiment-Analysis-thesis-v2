@@ -53,8 +53,9 @@ Sentiment_picture = {
 model, tokenizer = load_model()
 
 # Streamlit UI
-st.title("Sentiment Analyzer Test📈")
-st.subheader("Hey, use this sentiment analyzer! It's easy to use", divider="blue")
+st.title("Sentiment Classifier Test📈")
+st.subheader("Hey, use this sentiment classifier app! It's fun and easy to use", divider="blue")
+st.write("Please only use BCA Mobile text for testing only, do not use other text data for this testing. the details in **Home page**")
 
 df = None # make sure there's no dataset detected before being uploaded to Streamlit
 
