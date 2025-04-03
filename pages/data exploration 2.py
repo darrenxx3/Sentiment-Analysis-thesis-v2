@@ -174,7 +174,7 @@ with col2:
         
         if all_words:
             word_counts = Counter(all_words)
-            wordcloud = WordCloud(width=800, height=400, background_color="white", colormap="viridis", max_words=100).generate_from_frequencies(word_counts)
+            wordcloud = WordCloud(width=800, height=600, background_color="white", colormap="viridis", max_words=100).generate_from_frequencies(word_counts)
 
             fig, ax = plt.subplots(figsize=(10,5))
             ax.imshow(wordcloud, interpolation="bilinear")
@@ -236,4 +236,112 @@ with col3:
     st.pyplot(plt)
 
 with col4:
-    st.write("Top 10 Positive & Negative on Update and Force Closes issues")
+    st.subheader("Top 10 Positive & Negative on Update and Force Closes Topic issues")
+
+    word_counts = {topic: {"positive": Counter(), "negative": Counter()} for topic in topic_mapping.values()}
+
+        # Assign topics and count words per sentiment
+    for i, doc in enumerate(topic_counts):
+        if i < len(df):  # Ensure index is within range
+            main_topic = max(doc, key=lambda x: x[1])[0]  # Get most relevant topic
+            mapped_topic = topic_mapping[main_topic]  # Map to predefined label
+            sentiment = int(df.iloc[i]["sentiment"])
+            
+            if sentiment in [0, 2]:  # Only negative (0) and positive (2)
+                sentiment_label = "positive" if sentiment == 2 else "negative"
+                words = df.iloc[i]["processedwords"]  # Use preprocessed words
+                word_counts[mapped_topic][sentiment_label].update(words)
+
+    # Define the topic name we want to visualize
+    selected_topic_name = "Update & Force Closes issues"
+
+    # Find the correct topic index from the mapping
+    mapped_index = None
+    for key, value in topic_mapping.items():
+        if value == 4:  # "Update & Force Closes issues" is mapped to index 3
+            mapped_index = key
+            break
+
+    if mapped_index is not None and mapped_index in word_counts:
+        sentiments = word_counts[mapped_index]  # Get word counts for the correct topic
+
+        if "positive" in sentiments and "negative" in sentiments:
+            # Get top words for positive and negative sentiment
+            top_positive = sentiments["positive"].most_common(10)
+            top_negative = sentiments["negative"].most_common(10)
+
+            # Extract words and counts
+            positive_words, positive_counts = zip(*top_positive) if top_positive else ([], [])
+            negative_words, negative_counts = zip(*top_negative) if top_negative else ([], [])
+
+            # Ensure equal length by padding with zeros (if necessary)
+            max_len = max(len(positive_words), len(negative_words))
+            positive_words += ("",) * (max_len - len(positive_words))
+            negative_words += ("",) * (max_len - len(negative_words))
+            positive_counts += (0,) * (max_len - len(positive_counts))
+            negative_counts += (0,) * (max_len - len(negative_counts))
+
+            # Reverse order for better visualization
+            positive_words = positive_words[::-1]
+            negative_words = negative_words[::-1]
+            positive_counts = positive_counts[::-1]
+            negative_counts = negative_counts[::-1]
+
+            # Create figure
+            fig, ax = plt.subplots(figsize=(8, 8))
+            fig.suptitle(f"Top 10 Positive and Negative Words for {selected_topic_name} Topic", fontsize=14)
+
+            # Define y-axis positions
+            y_pos = np.arange(max_len)
+
+            # Set max width for centering
+            max_count = max(max(positive_counts, default=0), max(negative_counts, default=0))
+
+            # Plot bars with centering
+            ax.barh(y_pos, [-val for val in negative_counts], color="red", label="Negative Words", align="center")
+            ax.barh(y_pos, positive_counts, color="green", label="Positive Words", align="center")
+
+            # Set labels and titles
+            ax.set_yticks(y_pos)
+            ax.set_yticklabels(positive_words)  # Display words on the left side
+            ax.set_xlabel("Word Frequency")
+            ax.set_xlim(-max_count, max_count)  # Ensure both sides are symmetric
+            ax.axvline(0, color="black", linewidth=1)  # Vertical center line at 0
+            ax.legend(loc="upper right")
+
+            # Add labels on bars
+            for i, (neg, pos) in enumerate(zip(negative_counts, positive_counts)):
+                if neg > 0:
+                    ax.text(-neg, y_pos[i], f"{neg}", ha="right", va="center", color="white",
+                            bbox=dict(facecolor="black", alpha=0.5, edgecolor="none", pad=1))
+                if pos > 0:
+                    ax.text(pos, y_pos[i], f"{pos}", ha="left", va="center", color="white",
+                            bbox=dict(facecolor="black", alpha=0.5, edgecolor="none", pad=1))
+
+            # plt.gca().invert_yaxis()  # Invert to keep the highest frequency at the top
+            plt.tight_layout()
+            st.pyplot(fig)
+        else:
+            st.warning(f"No sentiment data found for topic {selected_topic_name}.")
+    else:
+        st.warning(f"Topic '{selected_topic_name}' not found in word_counts or mapping.")
+
+# page footer
+footer ="""
+<style>
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #f0f0f0; 
+    color: #333; /*text color*/
+    text-align: center;
+    padding: 5px 0;
+}
+</style>
+<div class="footer">
+    <p><b>Copyright © 2025</b> Made in 💘 by <b>Christopher Darren</b>. All rights reserved.</p>
+</div>
+"""
+st.markdown(footer, unsafe_allow_html=True)
