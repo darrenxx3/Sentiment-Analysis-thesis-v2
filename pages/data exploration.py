@@ -53,6 +53,9 @@ st.set_page_config(layout="wide", page_icon="💨")
 st.title("Exploration Data Analysis🌐")
 st.markdown("---")
 
+st.sidebar.header("Filters")
+
+
 #load dataset
 df = pd.read_csv("bca_preprocessed_data_stlit.csv", delimiter=',')
 df= df.dropna()

@@ -10,5 +10,4 @@ distilbert6_bestcurrentaccuracy_7000
 final_distilbert_model
 model/
 
-
 bca_preprocessed_half.csv
