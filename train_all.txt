@@ -97,3 +97,33 @@ Best Trial: FrozenTrial(number=2, state=TrialState.COMPLETE, values=[0.913875598
      0        0.892344           8                        4       0.000021       0.673337       5      0.000234 COMPLETE
      1        0.874801           4                        3       0.000016       0.618198       4      0.000332 COMPLETE
      2        0.913876           4                        2       0.000025       0.883748       5      0.000101 COMPLETE
+
+======================================================================================
+Optuna rerun because model error after launch vscode mitigation
+
+[I 2025-05-19 07:11:13,097] Trial 2 finished with value: 0.7982456140350878 and parameters: {'learning_rate': 1.0345840349687355e-05, 'num_train_epochs': 4, 'batch_size': 8, 'weight_decay': 0.0003599504101812984, 'max_grad_norm': 0.6899412849613829, 'gradient_accumulation_steps': 3}. Best is trial 1 with value: 0.9210526315789473.
+Best Hyperparameters: {'learning_rate': 2.9607136059708682e-05, 'num_train_epochs': 5, 'batch_size': 8, 'weight_decay': 0.00020147055759971185, 'max_grad_norm': 0.8791819195859791, 'gradient_accumulation_steps': 2}
+Best Trial: FrozenTrial(number=1, state=TrialState.COMPLETE, values=[0.9210526315789473], datetime_start=datetime.datetime(2025, 5, 19, 6, 15, 6, 881963), datetime_complete=datetime.datetime(2025, 5, 19, 6, 46, 37, 502098), params={'learning_rate': 2.9607136059708682e-05, 'num_train_epochs': 5, 'batch_size': 8, 'weight_decay': 0.00020147055759971185, 'max_grad_norm': 0.8791819195859791, 'gradient_accumulation_steps': 2}, user_attrs={}, system_attrs={}, intermediate_values={}, distributions={'learning_rate': FloatDistribution(high=3e-05, log=True, low=1e-05, step=None), 'num_train_epochs': IntDistribution(high=5, log=False, low=4, step=1), 'batch_size': CategoricalDistribution(choices=(4, 8)), 'weight_decay': FloatDistribution(high=0.001, log=True, low=0.0001, step=None), 'max_grad_norm': FloatDistribution(high=1.0, log=True, low=0.5, step=None), 'gradient_accumulation_steps': IntDistribution(high=4, log=False, low=2, step=1)}, trial_id=1, value=None)
+ Trial  Train Accuracy  Batch Size  Grad Accumulation Steps  Learning Rate  Max Grad Norm  Epochs  Weight Decay   Status
+     0        0.876396           8                        2       0.000018       0.786085       4      0.000369 COMPLETE
+     1        0.921053           8                        2       0.000030       0.879182       5      0.000201 COMPLETE
+     2        0.798246           8                        3       0.000010       0.689941       4      0.000360 COMPLETE
+
+
+Train:
+Evaluation of Best of Optuna Hyperparamater: {'eval_loss': 0.6202104687690735, 'eval_accuracy': 0.9266347687400319, 'eval_runtime': 11.1925, 'eval_samples_per_second': 112.039, 'eval_steps_per_second': 14.027, 'epoch': 4.9928286852589645}
+
+Evaluation
+DistilBERT with Optuna Retune classification Report
+Test Accuracy: 93.23%
+
+              precision    recall  f1-score   support
+
+    NEGATIVE       0.92      0.89      0.90       418
+     NEUTRAL       0.95      1.00      0.97       418
+    POSITIVE       0.93      0.91      0.92       419
+
+    accuracy                           0.93      1255
+   macro avg       0.93      0.93      0.93      1255
+weighted avg       0.93      0.93      0.93      1255
+
