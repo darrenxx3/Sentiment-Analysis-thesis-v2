@@ -8,7 +8,7 @@ import base64
 # pg = st.navigation([data_page, model_page, deploy_page])
 
 # page configuration
-st.set_page_config(page_title="Home | Sentiment Analysis BCA Mobile from Google PlayStore", layout="centered")
+st.set_page_config(page_title="Home | Sentiment Analysis of BCA Mobile Mobile Banking from Google PlayStore", layout="centered")
 # pg.run()
 st.title("Sentiment Analysis Final Project by :rainbow[Christopher Darren]")
 
@@ -21,7 +21,8 @@ st.markdown("- **Model Results:** See each model results visualization after tra
 st.markdown("- **Sentiment Classification Analyzer:** Classify text using the Transformer Model (DistilBERT).")
 
 st.markdown("---")
-st.write("N.B : **For sentiment classifier testing, the scope only being specific using BCA Mobile text only❗, please test with BCA Mobile data🙏**")
+st.write("N.B : **For sentiment classifier testing, the scope for this research is only being specific using BCA Mobile review text only❗, please test with BCA Mobile data🙏**")
+st.write("How to get the Data🤔? **You can scrap data from the Google play Store using a Python Library called 'google-play-scrapper'.\nThe details can be seen on this github repository**")
 
 
 # page footer
