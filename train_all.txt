@@ -74,6 +74,7 @@ Test Accuracy: 83.67%
     accuracy                           0.84      1831
    macro avg       0.84      0.84      0.84      1831
 weighted avg       0.84      0.84      0.84      1831
+======================================================================
 
 OPTUNA integration
 [I 2025-03-06 17:46:01,120] Trial 1 finished with value: 0.8987240829346093 and parameters: {'learning_rate': 2.45571600427136e-05, 'num_train_epochs': 4, 'batch_size': 4, 'weight_decay': 0.00015795143173370164, 'max_grad_norm': 0.11129287885119829, 'gradient_accumulation_steps': 3}. Best is trial 1 with value: 0.8987240829346093.
@@ -99,7 +100,7 @@ Best Trial: FrozenTrial(number=2, state=TrialState.COMPLETE, values=[0.913875598
      2        0.913876           4                        2       0.000025       0.883748       5      0.000101 COMPLETE
 
 ======================================================================================
-Optuna rerun because model error after launch vscode mitigation
+Optuna rerun because model error after launch vscode 19 May 2025 mitigation
 
 [I 2025-05-19 07:11:13,097] Trial 2 finished with value: 0.7982456140350878 and parameters: {'learning_rate': 1.0345840349687355e-05, 'num_train_epochs': 4, 'batch_size': 8, 'weight_decay': 0.0003599504101812984, 'max_grad_norm': 0.6899412849613829, 'gradient_accumulation_steps': 3}. Best is trial 1 with value: 0.9210526315789473.
 Best Hyperparameters: {'learning_rate': 2.9607136059708682e-05, 'num_train_epochs': 5, 'batch_size': 8, 'weight_decay': 0.00020147055759971185, 'max_grad_norm': 0.8791819195859791, 'gradient_accumulation_steps': 2}
@@ -113,8 +114,8 @@ Best Trial: FrozenTrial(number=1, state=TrialState.COMPLETE, values=[0.921052631
 Train:
 Evaluation of Best of Optuna Hyperparamater: {'eval_loss': 0.6202104687690735, 'eval_accuracy': 0.9266347687400319, 'eval_runtime': 11.1925, 'eval_samples_per_second': 112.039, 'eval_steps_per_second': 14.027, 'epoch': 4.9928286852589645}
 
-Evaluation
-DistilBERT with Optuna Retune classification Report
+Evaluation DistilBERT with Optuna Retune classification Report
+Train Accuracy: 92.66%
 Test Accuracy: 93.23%
 
               precision    recall  f1-score   support
